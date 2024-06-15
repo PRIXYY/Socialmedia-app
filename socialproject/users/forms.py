@@ -14,7 +14,7 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('photo',)
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
