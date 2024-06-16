@@ -22,7 +22,7 @@ def feed(request):
     logged_user=request.user
     return render(request,'posts/feed.html',{'posts':posts,'logged_user':logged_user})
 
-def like_posts(request):
+def like_post(request):
     post_id =request.POST.get('post_id')
     post = get_object_or_404(Post,id=post_id)
     if post.liked_by.filter(id=request.user.id).exists():
