@@ -3,6 +3,7 @@ from .forms import PostCreateForm
 from django.contrib.auth.decorators import login_required
 from .models import Post
 from django.shortcuts import get_object_or_404,redirect
+from django.http import JsonResponse
 # Create your views here.
 
 @login_required
@@ -22,11 +23,17 @@ def feed(request):
     logged_user=request.user
     return render(request,'posts/feed.html',{'posts':posts,'logged_user':logged_user})
 
+
+
 def like_post(request):
-    post_id =request.POST.get('post_id')
-    post = get_object_or_404(Post,id=post_id)
+    post_id = request.POST.get('post_id')
+    post = get_object_or_404(Post, id=post_id)
     if post.liked_by.filter(id=request.user.id).exists():
         post.liked_by.remove(request.user)
+        liked = False
     else:
         post.liked_by.add(request.user)
-    return redirect('feed')
+        liked = True
+
+    like_count = post.liked_by.count()
+    return JsonResponse({'liked': liked, 'like_count': like_count})
